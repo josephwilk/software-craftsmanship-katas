@@ -1,6 +1,6 @@
 Feature: Bowling
 
-  Scenario: Winning game
+  Scenario: Normal score points
     When I start a new game
     And I bowl:
       |score 1|score2|
@@ -10,15 +10,5 @@ Feature: Bowling
       |score 1|score2|
       |   5   |  0   |
       |   0   |  0   |
-    Then I should see
-    """
-    You (7)
-    | 5 0 | 1 2 |
-    | 5   | 3   |
-
-    Computer (5)
-    | 5 0 | 0 0 |
-    | 0   | 0   |
-
-    You wins by 2 points.
-  """
+    Then I should have a score of 7
+    And the opponent should have a score of 5

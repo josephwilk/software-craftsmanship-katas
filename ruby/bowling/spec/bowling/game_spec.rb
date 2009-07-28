@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe Game do
+module Bowling
+  describe Game do
 
+  end
 end

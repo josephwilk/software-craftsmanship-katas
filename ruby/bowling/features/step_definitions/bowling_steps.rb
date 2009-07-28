@@ -9,7 +9,7 @@ When /^my opponent bowls:$/ do |table|
 end
 
 When /^I start a new game$/ do
-  pending
+  @game = Bowling::Game.new
 end
 
 Then /^I should see$/ do |string|
