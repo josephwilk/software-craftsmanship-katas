@@ -58,8 +58,8 @@ module Bowling
         end
       end
 
-      describe "after the first roll knocked down 8 pins and the second roll knocked of 1" do
-        it "should create a new frame" do
+      describe "after the first roll knocked down 8 pins" do
+        it "should create a new frame after second roll" do
           frame = mock_frame(:complete? => false).as_null_object
           Frame.stub!(:new).and_return(frame)
 
