@@ -77,12 +77,7 @@ module Bowling
           frame1 = mock_strike_frame
           frame2 = mock_normal_frame(3,4)
 
-          Frame.stub!(:new).and_return(frame1, frame2)
-
-          @game = Game.new
-          @game.roll(10)
-          @game.roll(3)
-          @game.roll(4)
+          @game = Game.new [frame1, frame2]
 
           @game.score.should == 24
         end
@@ -93,13 +88,7 @@ module Bowling
           frame1 = mock_spair_frame(5,5)
           frame2 = mock_normal_frame(3,4)
 
-          Frame.stub!(:new).and_return(frame1, frame2)
-
-          @game = Game.new
-          @game.roll(5)
-          @game.roll(5)
-          @game.roll(3)
-          @game.roll(4)
+          @game = Game.new [frame1, frame2]
 
           @game.score.should == 20
         end
@@ -109,13 +98,7 @@ module Bowling
         frame1 = mock_normal_frame(5,2)
         frame2 = mock_normal_frame(5,2)
 
-        Frame.stub!(:new).and_return(frame1, frame2)
-
-        @game = Game.new
-        @game.roll(5)
-        @game.roll(2)
-        @game.roll(5)
-        @game.roll(2)
+        @game = Game.new [frame1, frame2]
 
         frame1.should_receive(:score).and_return(7)
         frame2.should_receive(:score).and_return(7)

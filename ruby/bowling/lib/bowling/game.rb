@@ -1,8 +1,8 @@
 module Bowling
   class Game
 
-    def initialize
-      @frames = []
+    def initialize(frames = [])
+      @frames = frames
     end
 
     def roll(pins)
