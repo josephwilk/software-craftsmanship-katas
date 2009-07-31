@@ -8,6 +8,27 @@ module Bowling
       mock("Frame #{@inc}", stubs)
     end
 
+    def mock_normal_frame(roll_1, roll_2)
+      frame = mock_frame(:score => roll_1 + roll_2,
+                         :strike? => false,
+                         :spair? => false,
+                         :first_roll => roll_1).as_null_object
+      frame.stub!(:complete?).and_return(false, true)
+      frame
+    end
+
+    def mock_strike_frame
+      frame = mock_frame(:score => 10, :strike? => true).as_null_object
+      frame.stub!(:complete?).and_return(true)
+      frame
+    end
+
+    def mock_spair_frame(roll_1, roll_2)
+      frame = mock_frame(:score => 10, :strike? => false, :spair? => true).as_null_object
+      frame.stub!(:complete?).and_return(false, true)
+      frame
+    end
+
     describe "ending game" do
       it "should not create a new frame after last roll" do
         @game = Game.new
@@ -24,14 +45,16 @@ module Bowling
           @game.roll(1)
         end
 
-        it "should record roll with the current frame" do
+        it "should record rolls with the current frame" do
           frame = mock_frame
           Frame.stub!(:new).and_return(frame.as_null_object)
 
-          frame.should_receive(:pins_down).with(8)
+          frame.should_receive(:pins_down).with(3)
+          frame.should_receive(:pins_down).with(4)
 
           @game = Game.new
-          @game.roll(8)
+          @game.roll(3)
+          @game.roll(4)
         end
       end
 
@@ -49,10 +72,42 @@ module Bowling
     end
 
     describe "#score" do
-      it "should get the score from all the games frames" do
-        frame1, frame2, frame3 = mock_frame.as_null_object, mock_frame.as_null_object, mock_frame.as_null_object
-        frame1.stub!(:complete?).and_return(false, true)
-        frame2.stub!(:complete?).and_return(false, true)
+      context "strike(10), followed by 3,4 pins" do
+        it "should calculate a score of (10 + 7) + 7" do
+          frame1 = mock_strike_frame
+          frame2 = mock_normal_frame(3,4)
+
+          Frame.stub!(:new).and_return(frame1, frame2)
+
+          @game = Game.new
+          @game.roll(10)
+          @game.roll(3)
+          @game.roll(4)
+
+          @game.score.should == 24
+        end
+      end
+
+      context "spair(5,5), followed by 3,4 pins" do
+        it "should calculate a score of (10 + 3) + 7" do
+          frame1 = mock_spair_frame(5,5)
+          frame2 = mock_normal_frame(3,4)
+
+          Frame.stub!(:new).and_return(frame1, frame2)
+
+          @game = Game.new
+          @game.roll(5)
+          @game.roll(5)
+          @game.roll(3)
+          @game.roll(4)
+
+          @game.score.should == 20
+        end
+      end
+
+      it "should get the score from all the game's frames" do
+        frame1 = mock_normal_frame(5,2)
+        frame2 = mock_normal_frame(5,2)
 
         Frame.stub!(:new).and_return(frame1, frame2)
 
