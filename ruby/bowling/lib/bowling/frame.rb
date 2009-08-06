@@ -21,5 +21,9 @@ module Bowling
     def strike?
       @roll_1 == TOTAL_PINS
     end
+
+    def spair?
+      (@roll_1 != TOTAL_PINS) && (@roll_1 + @roll_2 != 0)
+    end
   end
 end

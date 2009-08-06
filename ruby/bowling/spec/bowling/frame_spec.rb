@@ -52,5 +52,9 @@ module Bowling
         end
       end
     end
+
+    describe "#spair?" do
+    end
+
   end
 end
