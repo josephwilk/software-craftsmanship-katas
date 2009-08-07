@@ -18,7 +18,7 @@ module Bowling
       frame = @frames.last
       if frame.nil? || frame.complete?
         @frames << Frame.new
-        @frames.last.next_frame = frame
+        frame.next_frame = @frames.last unless frame.nil?
         frame = @frames.last
       end
       frame

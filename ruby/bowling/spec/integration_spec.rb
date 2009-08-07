@@ -26,6 +26,23 @@ module Bowling
                       1,1) { @game.score.should == 24 }
       end
     end
+    
+    describe "single and double strikes" do
+      it "should score x" do
+        @game = Game.new
+        having_rolled(10,
+                      2,2,
+                      10,
+                      10,
+                      3,3,
+                      1,1,
+                      1,1,
+                      1,1,
+                      1,1,
+                      1,1) { @game.score.should ==  (14 + 4 + 23 + 16 + 6 + 10) }
 
+      end
+    end
+    
   end
 end
