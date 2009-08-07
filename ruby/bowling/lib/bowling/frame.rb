@@ -32,9 +32,9 @@ module Bowling
     def score
       if three_strikes_in_a_row?
         30
-      elsif two_strikes_scoreable?
+      elsif two_strikes_followed_by_non_strike?
         20 + @next_frame.next_frame.roll_1
-      elsif one_strike?
+      elsif one_strike_followed_by_non_strike?
         @roll_1 + @next_frame.score
       elsif spair?
         10 + @next_frame.roll_1
@@ -46,15 +46,19 @@ module Bowling
     end
 
     def three_strikes_in_a_row?
-      strike? && @next_frame && @next_frame.strike? && @next_frame.next_frame && @next_frame.next_frame.strike?
+      strike_with_following_frame? && @next_frame.strike_with_following_frame? && @next_frame.next_frame.strike?
     end
 
-    def two_strikes_scoreable?
-      strike? && @next_frame && @next_frame.one_strike? && !@next_frame.next_frame.strike?
+    def two_strikes_followed_by_non_strike?
+      strike_with_following_frame? && @next_frame.one_strike_followed_by_non_strike?
     end
 
-    def one_strike?
-      strike? && @next_frame && !@next_frame.strike?
+    def one_strike_followed_by_non_strike?
+      strike_with_following_frame? && !@next_frame.strike?
+    end
+    
+    def strike_with_following_frame?
+      strike? && @next_frame
     end
 
   end
