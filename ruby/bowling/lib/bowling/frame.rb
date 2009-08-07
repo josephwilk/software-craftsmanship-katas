@@ -46,15 +46,15 @@ module Bowling
     end
 
     def three_strikes_in_a_row?
-      one_strike? && @next_frame.two_strikes?
+      strike? && @next_frame && @next_frame.strike? && @next_frame.next_frame && @next_frame.next_frame.strike?
     end
 
     def two_strikes_scoreable?
-      one_strike? && @next_frame.one_strike?
+      strike? && @next_frame && @next_frame.one_strike? && !@next_frame.next_frame.strike?
     end
 
     def one_strike?
-      strike? && @next_frame
+      strike? && @next_frame && !@next_frame.strike?
     end
 
   end

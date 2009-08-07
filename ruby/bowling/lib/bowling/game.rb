@@ -10,7 +10,7 @@ module Bowling
     end
 
     def score
-      @frames.reverse.reduce(0) {|score_total, frame| puts frame.score; score_total += frame.score}
+      @frames.reverse.reduce(0) {|score_total, frame| score_total += frame.score}
     end
 
     private
