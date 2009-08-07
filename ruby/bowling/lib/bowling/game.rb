@@ -10,18 +10,7 @@ module Bowling
     end
 
     def score
-      previous_frame = @frames[-1]
-      @frames.reverse.reduce(0) do |score_total, frame|
-        if frame.strike?
-          score_total += frame.score + previous_frame.score
-        elsif frame.spair?
-          score_total += frame.score + previous_frame.first_roll
-        else
-          score_total += frame.score
-        end
-        previous_frame = frame
-        score_total
-      end
+      @frames.reverse.reduce(0) {|score_total, frame| puts frame.score; score_total += frame.score}
     end
 
     private
@@ -29,6 +18,7 @@ module Bowling
       frame = @frames.last
       if frame.nil? || frame.complete?
         @frames << Frame.new
+        @frames.last.next_frame = frame
         frame = @frames.last
       end
       frame

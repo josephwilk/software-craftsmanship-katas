@@ -1,7 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 module Bowling
+
   describe Game do
+    include Rolling
     def mock_frame(stubs={})
       @inc ||= 0
       @inc += 1
@@ -32,6 +34,8 @@ module Bowling
     describe "ending game" do
       it "should not create a new frame after last roll" do
         @game = Game.new
+
+        #having_rolled(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
       end
     end
 
@@ -72,45 +76,6 @@ module Bowling
     end
 
     describe "#score" do
-      context "spair (5,5)" do
-        context "(3,4) pins" do
-          it "should score the first frame as (10) + 3" do
-          frame1 = mock_spair_frame(5,5)
-          frame2 = mock_normal_frame(3,4)
-
-          @game = Game.new [frame1, frame2]
-
-          @game.score.should == 20
-          end
-        end
-      end
-
-      context "strike" do
-        context "(3,4) pins" do
-          it "should calculate first frame score as (10) + 7" do
-            frame1 = mock_strike_frame
-            frame2 = mock_normal_frame(3,4)
-
-            @game = Game.new [frame1, frame2]
-
-            @game.score.should == 24
-          end
-        end
-
-        context "strike" do
-          context "(3,4) pins" do
-            it "should calculate 1st frames score as 20 + 3"
-            it "should calculate 2nd frames score as 10 + 7"
-          end
-
-          context "strike" do
-            it "should calculate 1st frame score as 30"
-            it "should calculate 2nd frame score as 20 + 3"
-            it "should calculate 3rd frame score as 10 + 7"
-          end
-        end
-      end
-
       it "should get the score from all the game's frames" do
         frame1 = mock_normal_frame(5,2)
         frame2 = mock_normal_frame(5,2)
