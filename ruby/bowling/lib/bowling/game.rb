@@ -18,19 +18,23 @@ module Bowling
       frame = @frames.last
       if frame.nil? || frame.complete?
         @frames << Frame.new
-        frame.next_frame = @frames.last unless frame.nil?
-        frame = @frames.last
+        frame.next_frame = last_game unless frame.nil?
+        frame = last_game
       end
       frame
     end
 
     def game_ended?
-      (@frames.size == 10 && @frames.last.complete? && !special_last_game?) ||
+      (@frames.size == 10 && last_game.complete? && !special_last_game?) ||
       (@frames.size == 12 )
     end
 
     def special_last_game?
-      @frames.last.strike? || @frames.last.spair? 
+      last_game.strike? || last_game.spair? 
+    end
+
+    def last_game
+      @frames.last
     end
   end
 end
