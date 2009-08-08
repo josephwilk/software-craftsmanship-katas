@@ -15,7 +15,7 @@ module Bowling
 
     private
     def current_frame
-      frame = @frames.last
+      frame = last_game
       if frame.nil? || frame.complete?
         @frames << Frame.new
         frame.next_frame = last_game unless frame.nil?
