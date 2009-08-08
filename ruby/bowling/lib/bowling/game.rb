@@ -15,25 +15,34 @@ module Bowling
 
     private
     def current_frame
-      frame = last_frame
-      if frame.nil? || frame.complete?
-        @frames << Frame.new
-        frame.next_frame = last_frame unless frame.nil?
-        frame = last_frame
+      if first_frame? || active_frame.complete?
+        new_frame
+      else
+        active_frame
       end
-      frame
     end
 
+    def new_frame
+      new_frame = Frame.new
+      active_frame.next_frame = new_frame unless first_frame?
+      @frames << new_frame
+      new_frame          
+    end
+
+    def first_frame?
+      @frames.empty?
+    end
+    
     def game_ended?
-      (@frames.size == 10 && last_frame.complete? && !special_last_game?) ||
+      (@frames.size == 10 && active_frame.complete? && !special_last_game?) ||
       (@frames.size == 12 )
     end
 
     def special_last_game?
-      last_frame.strike? || last_frame.spair? 
+      active_frame.strike? || active_frame.spair? 
     end
 
-    def last_frame
+    def active_frame
       @frames.last
     end
   end
