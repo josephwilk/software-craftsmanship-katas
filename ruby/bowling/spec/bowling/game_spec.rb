@@ -7,7 +7,7 @@ module Bowling
     def mock_frame(stubs={})
       @inc ||= 0
       @inc += 1
-      mock("Frame #{@inc}", stubs)
+      mock("Frame #{@inc}", {:pins_down => nil}.merge(stubs))
     end
 
     def mock_normal_frame(roll_1, roll_2)
@@ -15,7 +15,7 @@ module Bowling
                          :strike? => false,
                          :spair? => false,
                          :first_roll => roll_1).as_null_object
-      frame.stub!(:complete?).and_return(false, true)
+      frame.stub!(:complete?).and_return(true)
       frame
     end
 
@@ -27,18 +27,10 @@ module Bowling
 
     def mock_spair_frame(roll_1, roll_2)
       frame = mock_frame(:score => 10, :strike? => false, :spair? => true).as_null_object
-      frame.stub!(:complete?).and_return(false, true)
+      frame.stub!(:complete?).and_return(true)
       frame
     end
-
-    describe "ending game" do
-      it "should not create a new frame after last roll" do
-        @game = Game.new
-
-        #having_rolled(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-      end
-    end
-
+  
     describe "#roll" do
       describe "first roll of the game" do
         it "should create the first Frame" do
@@ -73,6 +65,26 @@ module Bowling
           @game.roll(1)
         end
       end
+
+      describe "ending game without any extra games" do
+        it "should not create a new frame after last roll" do
+          @game = Game.new([mock_normal_frame(1,2)]*10)
+
+          Frame.should_not_receive(:new)
+        
+          @game.roll(3)
+        end
+      end
+
+      describe "ending game in a strike" do
+        it "should create a new 11th frame" do
+          @game = Game.new([mock_strike_frame]*10)
+        
+          Frame.should_receive(:new).and_return(mock_strike_frame)
+        
+          @game.roll(1)
+        end
+      end    
     end
 
     describe "#score" do

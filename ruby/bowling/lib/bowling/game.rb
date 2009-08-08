@@ -6,7 +6,7 @@ module Bowling
     end
 
     def roll(pins)
-      current_frame.pins_down(pins)
+      current_frame.pins_down(pins) unless game_ended?
     end
 
     def score
@@ -22,6 +22,15 @@ module Bowling
         frame = @frames.last
       end
       frame
+    end
+
+    def game_ended?
+      (@frames.size == 10 && @frames.last.complete? && !special_last_game?) ||
+      (@frames.size == 12 )
+    end
+
+    def special_last_game?
+      @frames.last.strike? || @frames.last.spair? 
     end
   end
 end
