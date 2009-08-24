@@ -1,95 +1,81 @@
-require 'ant'
+require File.dirname(__FILE__) + '/../ant.rb'
 
-describe Ant do
+
+describe "Langton's Ant" do
   
   before(:each) do
-    @board =  board = mock("board").as_null_object
+    @langton_ant = LangstonAnt.new(1,2)
   end
   
-  it "should register with the board" do
-    ant = Ant.new
-    
-    @board.should_receive(:add_ant).with(ant)
-    
-    ant.place_on_board(@board)
-  end 
+  it "should create a board with black or white squares" do
+    [:black, :white].should include @langton_ant.color(0,0)
+    [:black, :white].should include @langton_ant.color(0,1)
+  end
   
-  it "should sense the colour of the square it is on" do
-    ant = Ant.new
-    ant.place_on_board(@board)
-    
-    @board.should_receive(:color).with(ant).and_return(:white)
-    
-    ant.poll
+  it "should designate one square the 'ant'" do
+    @langton_ant.ant = [0,1]
+
+    @langton_ant.ant.should == [0,1]
   end
 
-  describe "turning the ant" do
+  it "should give the ant a direction" do
+    [:north, :south, :east, :west].should include @langton_ant.ant_direction
+  end
+  
+  context "ant is on a black square" do
     before :each do
-      @ant = Ant.new
-      @ant.place_on_board(@board)
+      @langton_ant.ant = [0,0]
     end
     
-    context "white square" do
-      it "should turn 90* left" do
-        @board.stub!(:color).and_return :white
-        
-        @board.should_receive(:turn).with(@ant, :left)
-        @board.should_not_receive(:turn).with(@ant, :right)
-        
-        @ant.poll
+    it "should turn square white" do
+      @langton_ant.set_color(0, 0, :black)
+
+      @langton_ant.poll
+
+      @langton_ant.color(0,0).should == :white
+    end
+
+    it "should turn 90 degrees right" do
+      @langton_ant.set_color(0, 0, :black)
+      @langton_ant.ant_direction = :north
+
+      @langton_ant.poll
+
+      @langton_ant.ant_direction.should == :east
+    end
+  end
+
+  context "ant is on a white square" do
+    it "should turn square black" do
+      @langton_ant.set_color(0,0, :white)
+      @langton_ant.ant = [0,0]
+
+      @langton_ant.poll
+
+      @langton_ant.color(0,0).should == :black
+    end
+    
+    context "facing north" do  
+      it "should turn 90 degrees left" do
+        @langton_ant.set_color(0, 0, :white)
+        @langton_ant.ant_direction = :north
+
+        @langton_ant.poll
+
+        @langton_ant.ant_direction.should == :west
       end
-    end
-    
-    context "black square" do
-      it "should turn 90* right" do
-        @board.stub!(:color).and_return :black
-        
-        @board.should_receive(:turn).with(@ant, :right)
-        @board.should_not_receive(:turn).with(@ant, :left)
 
-        @ant.poll
+      it "shouid move west one square" do
+        @langton_ant.set_color(0, 0, :white)
+        @langton_ant.ant = [1,1]
+        @langton_ant.ant_direction = :north
+
+        @langton_ant.poll
+
+        @langton_ant.ant.should == [0, 1]
       end
-    end
+    end    
   end
 
-  it "should toggle the colour of the current square" do
-    @ant = Ant.new
-    @ant.place_on_board(@board)
-    
-    @board.should_receive(:toggle).with(@ant)
-    
-    @ant.poll
-  end
-
-  it "should toggle the colour of the current square" do
-    @ant = Ant.new
-    @ant.place_on_board(@board)
-    
-    @board.should_receive(:move).with(@ant)
-    
-    @ant.poll
-  end
-end
-
-
-
-describe Board do
-  describe "generating an initial board" do
-    it "should generate a two dimensional board" do
-      board = Board.new
-      flat_board = board.raw_board
-
-    end
-    
-    it "should generate a board with black or white squares" do
-      board = Board.new
-      raw_board = board.raw_board
-      
-      raw_board.size.should > 0
-      raw_board.flatten.each do | item |
-        [:white, :black].should include(item)
-      end
-    end
-  end
   
 end
