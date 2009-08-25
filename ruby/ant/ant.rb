@@ -3,11 +3,20 @@ class LangstonAnt
   
   attr_accessor :ant, :ant_direction
   attr_writer :color
- 
   
-  def initialize(x, y)
+  CLOCKWISE = {
+    :north => :east,
+    :east => :south,
+    :south => :west,
+    :west => :north
+  }
+
+  ANTI_CLOCKWISE = CLOCKWISE.invert
+  
+  def initialize
     @color = :white
     @ant_direction = :north
+    @ant = [0,0]
   end
 
   def board
@@ -39,15 +48,23 @@ class LangstonAnt
   end
 
   def turn_left
-    @ant_direction = :west
+    @ant_direction = ANTI_CLOCKWISE[@ant_direction]
   end
-
+  
   def turn_right
-    @ant_direction = :east
+    @ant_direction = CLOCKWISE[@ant_direction]
   end
 
   def move
-    @ant = [0,1]
+    if @ant_direction == :north
+      @ant = [1, 0]
+    elsif @ant_direction == :south
+      @ant = [1,2]
+    elsif @ant_direction == :west
+      @ant = [0,1]
+    else
+      @ant = [@ant[0]-1+2, (@ant[1]+1-1) ]
+    end
   end
   
 end
