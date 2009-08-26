@@ -8,7 +8,7 @@ end
 describe "Langton's Ant" do
   
   before(:each) do
-    @langton_ant = LangstonAnt.new
+    @langton_ant = LangtonAnt.new
   end
   
   it "should create a board with black or white squares" do
@@ -118,6 +118,24 @@ describe "Langton's Ant" do
         end
       end
     end
-    
-  end 
+
+  end
+
+  describe 'leaving a trail' do
+    context "when the board is all one color" do
+      it "should leave the previous square a different colour to the current square" do
+        ant = LangtonAnt.new
+
+        ant.set_color(0,0, :black)
+        ant.set_color(1,0, :black)
+        ant.ant = [0,0]
+        ant.ant_direction = :north
+
+        ant.poll
+
+        ant.color(0,0).should == :white
+        ant.color(1,0).should == :black
+      end
+    end
+  end
 end

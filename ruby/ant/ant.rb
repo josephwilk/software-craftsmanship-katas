@@ -1,5 +1,5 @@
 
-class LangstonAnt
+class LangtonAnt
   
   attr_accessor :ant, :ant_direction
   attr_writer :color
@@ -57,14 +57,20 @@ class LangstonAnt
 
   def move
     if @ant_direction == :north
-      @ant = [1, 0]
+      delta = [0,-1]
     elsif @ant_direction == :south
-      @ant = [1,2]
+      delta = [0,1]
     elsif @ant_direction == :west
-      @ant = [0,1]
+      delta = [-1,0]
     else
-      @ant = [@ant[0]-1+2, (@ant[1]+1-1) ]
+      delta = [1,0]
     end
+
+    @ant = coordinate_add(delta)
+  end
+
+  def coordinate_add(a)
+    [a[0] + @ant[0], a[1] + @ant[1]]
   end
   
 end
