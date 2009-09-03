@@ -11,9 +11,8 @@ describe "Langton's Ant" do
     @langton_ant = LangtonAnt.new
   end
   
-  it "should create a board with black or white squares" do
-    [:black, :white].should include @langton_ant.color(0,0)
-    [:black, :white].should include @langton_ant.color(0,1)
+  it "should start on a black square" do
+    @langton_ant.color(0,0).should == :black
   end
   
   it "should designate one square the 'ant'" do

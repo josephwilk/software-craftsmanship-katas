@@ -14,26 +14,31 @@ class LangtonAnt
   ANTI_CLOCKWISE = CLOCKWISE.invert
   
   def initialize
-    @color = :white
+    @color = {'0,0' => :black}
+    #@color = {} unless @color@color = :white
     @ant_direction = :north
     @ant = [0,0]
   end
-
-  def board
-    []
-  end
   
   def set_color(x, y, color)
-    @color = color
+    @color["#{x},#{y}"] = color
+  end
+
+  def ant_color=(color)
+    set_color @ant[0], @ant[1], color 
+  end
+
+  def ant_color
+    color  @ant[0], @ant[1]
   end
   
   def color(x, y)
-    @color
+    @color["#{x},#{y}"]
   end
   
   def poll
-    @color = flip(@color)
-    if @color == :black
+    ant_color = flip(ant_color)
+    if ant_color == :black
       turn_left
     else
       turn_right
