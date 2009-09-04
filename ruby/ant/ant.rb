@@ -1,7 +1,4 @@
-require 'forwardable'
-
 class LangtonAnt
-  extend Forwardable
 
   class Ant
     attr_reader :direction, :position
