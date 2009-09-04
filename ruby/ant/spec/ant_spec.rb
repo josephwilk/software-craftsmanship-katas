@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/../ant.rb'
 
-
 def coordinate_add(a, b)
   [a[0] + b[0], a[1] + b[1]]
 end
@@ -44,7 +43,7 @@ describe "Langton's Ant" do
     {:north => :east, :east => :south, :south => :west, :west => :north}.each do |start_direction, end_direction|
       context "facing #{start_direction}" do
         it "should turn 90 degrees right" do
-          LangtonAnt.new(LangtonAnt::Ant.new([0,0], start_direction))
+          @langton_ant = LangtonAnt.new(LangtonAnt::Ant.new([0,0], start_direction))
 
           @langton_ant.poll
 
@@ -69,12 +68,10 @@ describe "Langton's Ant" do
   end
 
   context "on a white square" do
-    before(:each) do
+    it "should turn square black" do
       @langton_ant = LangtonAnt.new(LangtonAnt::Ant.new([0,0]))
       @langton_ant.set_color(0,0, :white)
-    end
-    
-    it "should turn square black" do
+
       @langton_ant.poll
 
       @langton_ant.color(0,0).should == :black
@@ -84,6 +81,7 @@ describe "Langton's Ant" do
       context "facing #{start_direction}" do
         it "should turn 90 degrees left" do
           @langton_ant = LangtonAnt.new(LangtonAnt::Ant.new([0,0], start_direction))
+          @langton_ant.set_color(0,0, :white)
 
           @langton_ant.poll
 
@@ -96,6 +94,7 @@ describe "Langton's Ant" do
       context "starting at [0,0] and facing #{start_direction}" do
         it "should turn left and move forward one square" do
           @langton_ant = LangtonAnt.new(LangtonAnt::Ant.new([0,0], start_direction))
+          @langton_ant.set_color(0,0, :white)
 
           @langton_ant.poll
 
@@ -106,7 +105,7 @@ describe "Langton's Ant" do
       end_position_from_three_five = coordinate_add([3,5], end_position)
       context "starting at [3,5] and facing #{start_direction}" do
         it "should turn left and move forward one square" do
-          LangtonAnt.new(LangtonAnt::Ant.new([3,5], start_direction))
+          @langton_ant = LangtonAnt.new(LangtonAnt::Ant.new([3,5], start_direction))
           @langton_ant.set_color(3,5, :white)         
 
           @langton_ant.poll

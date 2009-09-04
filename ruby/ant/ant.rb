@@ -5,12 +5,20 @@ class LangtonAnt
 
   def_delegator :@ant, :direction, :ant_direction
   def_delegator :@ant, :direction=, :ant_direction=
-#  def_delegator :@ant, :position=, :ant=
   def_delegator :@ant, :position
   
   class Ant
     attr_accessor :direction, :position
 
+    CLOCKWISE = {
+      :north => :east,
+      :east => :south,
+      :south => :west,
+      :west => :north
+    }
+
+    ANTI_CLOCKWISE = CLOCKWISE.invert
+    
     def initialize(cordinates = [0,0], direction = :north)
       @direction = direction
       @position = cordinates
@@ -25,21 +33,11 @@ class LangtonAnt
     end
   end
   
-  CLOCKWISE = {
-    :north => :east,
-    :east => :south,
-    :south => :west,
-    :west => :north
-  }
-
-  ANTI_CLOCKWISE = CLOCKWISE.invert
-
   attr_accessor :ant
   
   def initialize(ant = Ant.new)
     @ant = ant 
-    @color = {}
-        
+    @color = {}        
     @default_color = :black
   end 
   
