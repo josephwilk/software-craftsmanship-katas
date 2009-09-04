@@ -59,8 +59,8 @@ class LangtonAnt
     @default_color = :black
   end 
   
-  def set_color(x_y, color)
-    @color["#{x_y[0]},#{x_y[1]}"] = color
+  def []=(x,y,color)
+    @color["#{x},#{y}"] = color
   end 
   
   def [](x, y)
@@ -68,7 +68,7 @@ class LangtonAnt
   end
   
   def poll
-    set_color(@ant.position, flip(ant_color))
+    self.[]=(@ant.position[0], @ant.position[1], flip(ant_color))
     if ant_color == :black
       @ant.turn_left
     else
