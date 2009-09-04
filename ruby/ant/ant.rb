@@ -3,10 +3,6 @@ require 'forwardable'
 class LangtonAnt  
   extend Forwardable
 
-  def_delegator :@ant, :direction, :ant_direction
-  def_delegator :@ant, :direction=, :ant_direction=
-  def_delegator :@ant, :position
-  
   class Ant
     attr_accessor :direction, :position
 
@@ -31,9 +27,31 @@ class LangtonAnt
     def turn_right
       @direction = CLOCKWISE[@direction]
     end
+
+    def move
+      @position = coordinate_add(move_delta)
+    end
+
+    private
+    def move_delta
+      case @direction
+      when :north
+        delta = [0,-1]
+      when:south
+        delta = [0,1]
+      when :west
+        delta = [-1,0]
+      else
+        delta = [1,0]
+      end
+    end
+        
+    def coordinate_add(a)
+      [a[0] + @position[0], a[1] + @position[1]]
+    end
   end
   
-  attr_accessor :ant
+  attr_reader :ant
   
   def initialize(ant = Ant.new)
     @ant = ant 
@@ -41,20 +59,20 @@ class LangtonAnt
     @default_color = :black
   end 
   
-  def set_color(x, y, color)
-    @color["#{x},#{y}"] = color
+  def set_color(x_y, color)
+    @color["#{x_y[0]},#{x_y[1]}"] = color
   end
   
   def ant_color=(color)
-    set_color(@ant.position[0], @ant.position[1], color)
+    set_color(@ant.position, color)
   end
     
   def ant_color
-    color(@ant.position[0], @ant.position[1])
+    color(@ant.position)
   end
   
-  def color(x, y)
-    @color["#{x},#{y}"] || @default_color
+  def color(x_y)
+    @color["#{x_y[0]},#{x_y[1]}"] || @default_color
   end
   
   def poll
@@ -64,32 +82,12 @@ class LangtonAnt
     else
       @ant.turn_right
     end
-
-    move
+    @ant.move
   end
 
   private
   def flip(color)
     color == :black ? :white : :black
   end
-
-
-  def move
-    if ant_direction == :north
-      delta = [0,-1]
-    elsif ant_direction == :south
-      delta = [0,1]
-    elsif ant_direction == :west
-      delta = [-1,0]
-    else
-      delta = [1,0]
-    end
-
-    @ant.position = coordinate_add(delta)
-  end
-
-  def coordinate_add(a)
-    [a[0] + @ant.position[0], a[1] + @ant.position[1]]
-  end
-  
+ 
 end
