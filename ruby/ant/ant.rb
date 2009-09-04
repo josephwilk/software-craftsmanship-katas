@@ -1,10 +1,10 @@
 require 'forwardable'
 
-class LangtonAnt  
+class LangtonAnt
   extend Forwardable
 
   class Ant
-    attr_accessor :direction, :position
+    attr_reader :direction, :position
 
     CLOCKWISE = {
       :north => :east,
@@ -14,7 +14,7 @@ class LangtonAnt
     }
 
     ANTI_CLOCKWISE = CLOCKWISE.invert
-    
+
     def initialize(cordinates = [0,0], direction = :north)
       @direction = direction
       @position = cordinates
@@ -23,7 +23,7 @@ class LangtonAnt
     def turn_left
       @direction = ANTI_CLOCKWISE[@direction]
     end
-  
+
     def turn_right
       @direction = CLOCKWISE[@direction]
     end
@@ -36,37 +36,37 @@ class LangtonAnt
     def move_delta
       case @direction
       when :north
-        delta = [0,-1]
+        [0,-1]
       when:south
-        delta = [0,1]
+        [0,1]
       when :west
-        delta = [-1,0]
+        [-1,0]
       else
-        delta = [1,0]
+        [1,0]
       end
     end
-        
+
     def coordinate_add(a)
       [a[0] + @position[0], a[1] + @position[1]]
     end
   end
-  
+
   attr_reader :ant
-  
+
   def initialize(ant = Ant.new)
-    @ant = ant 
-    @color = {}        
+    @ant = ant
+    @color = {}
     @default_color = :black
-  end 
-  
+  end
+
   def []=(x,y,color)
     @color["#{x},#{y}"] = color
-  end 
-  
+  end
+
   def [](x, y)
     @color["#{x},#{y}"] || @default_color
   end
-  
+
   def poll
     self.[]=(@ant.position[0], @ant.position[1], flip(ant_color))
     if ant_color == :black
@@ -85,5 +85,5 @@ class LangtonAnt
   def flip(color)
     color == :black ? :white : :black
   end
- 
+
 end
