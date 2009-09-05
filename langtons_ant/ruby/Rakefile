@@ -44,3 +44,8 @@ if require_spec
     t.verbose = true
   end
 end
+
+desc "Flog it"
+task :flog do
+  system "flog *.rb"
+end
