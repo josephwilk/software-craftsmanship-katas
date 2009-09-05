@@ -18,7 +18,7 @@ module LangtonAnt
       @color = {}
       @default_color = :black
     end
-    
+
     def []=(x,y,color)
       @color["#{x},#{y}"] = color
     end
@@ -27,7 +27,7 @@ module LangtonAnt
       @color["#{x},#{y}"] || @default_color
     end
   end
-  
+
   class Ant
     attr_reader :direction, :position
 
@@ -54,21 +54,18 @@ module LangtonAnt
     end
 
     def see(world)
-      if world[*@position] == :black
-        turn_right
-      else
-       turn_left
-      end
+      world[*@position] == :black ? turn_right :  turn_left
 
       position = @position
-      action = lambda {|world| world[*position] =  flip(world[*position])}
-    
-      move
+      action = lambda {|world| world[*position] = flip(world[*position])}
+
+      move_forward
+
       action
     end
 
     private
-    def move
+    def move_forward
       @position = coordinate_add(delta)
     end
 
