@@ -10,11 +10,11 @@ describe "Langton's Ant" do
   end
 
   it "should start on a black square" do
-    @langton_ant[0,0].should == :black
+    @langton_ant.world[0,0].should == :black
   end
 
   it "should defaut unexplored squares to black" do
-    @langton_ant[99,82].should == :black
+    @langton_ant.world[99,82].should == :black
   end
 
   it "should designate one square the 'ant'" do
@@ -30,11 +30,11 @@ describe "Langton's Ant" do
   context "on a black square" do
     it "should turn square white" do
       langton_ant = LangtonAnt.new(LangtonAnt::Ant.new([0,0]))
-      langton_ant[0,0]= :black
+      langton_ant.world[0,0]= :black
 
       langton_ant.poll
 
-      langton_ant[0,0].should == :white
+      langton_ant.world[0,0].should == :white
     end
 
     { :north => :east,
@@ -75,11 +75,11 @@ describe "Langton's Ant" do
   context "on a white square" do
     it "should turn square black" do
       langton_ant = LangtonAnt.new(LangtonAnt::Ant.new([0,0]))
-      langton_ant[0,0]= :white
+      langton_ant.world[0,0]= :white
 
       langton_ant.poll
 
-      langton_ant[0,0].should == :black
+      langton_ant.world[0,0].should == :black
     end
 
     { :north => :west,
@@ -90,7 +90,7 @@ describe "Langton's Ant" do
       context "facing #{start_direction}" do
         it "should turn 90 degrees left" do
           langton_ant = LangtonAnt.new(LangtonAnt::Ant.new([0,0], start_direction))
-          langton_ant[0,0] = :white
+          langton_ant.world[0,0] = :white
 
           langton_ant.poll
 
@@ -107,7 +107,7 @@ describe "Langton's Ant" do
       context "starting at [0,0] and facing #{start_direction}" do
         it "should turn left and move forward one square" do
           langton_ant = LangtonAnt.new(LangtonAnt::Ant.new([0,0], start_direction))
-          langton_ant[0,0]= :white
+          langton_ant.world[0,0]= :white
 
           langton_ant.poll
 
@@ -119,7 +119,7 @@ describe "Langton's Ant" do
       context "starting at [3,5] and facing #{start_direction}" do
         it "should turn left and move forward one square" do
           langton_ant = LangtonAnt.new(LangtonAnt::Ant.new([3,5], start_direction))
-          langton_ant[3,5]= :white
+          langton_ant.world[3,5]= :white
 
           langton_ant.poll
 
@@ -135,13 +135,13 @@ describe "Langton's Ant" do
       it "should leave the previous square a different colour to the current square" do
         langton_ant = LangtonAnt.new(LangtonAnt::Ant.new([0,0], :north))
 
-        langton_ant[0,0]= :black
-        langton_ant[1,0]= :black
+        langton_ant.world[0,0]= :black
+        langton_ant.world[1,0]= :black
 
         langton_ant.poll
 
-        langton_ant[0,0].should == :white
-        langton_ant[1,0].should == :black
+        langton_ant.world[0,0].should == :white
+        langton_ant.world[1,0].should == :black
       end
     end
   end
