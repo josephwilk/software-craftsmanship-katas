@@ -33,6 +33,8 @@ if require_spec
     names.flatten.each { |name| tasks.delete(name) }
   end
 
+  task :default => ['spec']
+  
   desc "Run the Rspec specs"
   Spec::Rake::SpecTask.new do |t|
     t.spec_opts = ['--options', "spec/spec.opts"]
