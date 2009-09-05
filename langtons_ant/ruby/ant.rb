@@ -1,5 +1,33 @@
-class LangtonAnt
+module LangtonAnt
+  class God
+    attr_reader :world, :ant
 
+    def initialize(ant = Ant.new)
+      @ant = ant
+      @world = World.new
+    end
+
+    def poll
+      action = @ant.see(@world)
+      action.call(@world)
+    end
+  end
+
+  class World
+    def initialize
+      @color = {}
+      @default_color = :black
+    end
+    
+    def []=(x,y,color)
+      @color["#{x},#{y}"] = color
+    end
+
+    def [](x, y)
+      @color["#{x},#{y}"] || @default_color
+    end
+  end
+  
   class Ant
     attr_reader :direction, :position
 
@@ -33,7 +61,7 @@ class LangtonAnt
       end
 
       position = @position
-      action = Proc.new {|world| world[*position] =  flip(world[*position])}
+      action = lambda {|world| world[*position] =  flip(world[*position])}
     
       move
       action
@@ -64,32 +92,5 @@ class LangtonAnt
     def flip(color)
       color == :black ? :white : :black
     end
-  end
-
-  class World
-    def initialize
-      @color = {}
-      @default_color = :black
-    end
-    
-    def []=(x,y,color)
-      @color["#{x},#{y}"] = color
-    end
-
-    def [](x, y)
-      @color["#{x},#{y}"] || @default_color
-    end
-  end
-  
-  attr_reader :ant, :world
-
-  def initialize(ant = Ant.new)
-    @ant = ant
-    @world = World.new
-  end
-
-  def poll
-    action = @ant.see(@world)
-    action.call(@world)
   end
 end
