@@ -8,23 +8,22 @@ module LangtonAnt
     end
 
     def poll
-      action = @ant.see(@world)
-      action.call(@world)
+      @ant.act_on(@world)
     end
   end
 
   class World
     def initialize
-      @color = {}
+      @board_colors = {}
       @default_color = :black
     end
 
     def []=(x,y,color)
-      @color["#{x},#{y}"] = color
+      @board_colors["#{x},#{y}"] = color
     end
 
     def [](x, y)
-      @color["#{x},#{y}"] || @default_color
+      @board_colors["#{x},#{y}"] || @default_color
     end
   end
 
@@ -45,6 +44,13 @@ module LangtonAnt
       @position = cordinates
     end
 
+    def act_on(world)
+      world[*@position] == :black ? turn_right :  turn_left
+      world[*@position] = flip(world[*@position])
+      move_forward
+    end
+
+    private
     def turn_left
       @direction = ANTI_CLOCKWISE[@direction]
     end
@@ -53,18 +59,6 @@ module LangtonAnt
       @direction = CLOCKWISE[@direction]
     end
 
-    def see(world)
-      world[*@position] == :black ? turn_right :  turn_left
-
-      position = @position
-      action = lambda {|world| world[*position] = flip(world[*position])}
-
-      move_forward
-
-      action
-    end
-
-    private
     def move_forward
       @position = coordinate_add(delta)
     end
