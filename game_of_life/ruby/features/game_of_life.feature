@@ -8,7 +8,37 @@ Scenario: Empty universe
   When 1 tick passes
   Then I should see the output:
     """
-      ...
-      ...
-      ...
+    ...
+    ...
+    ...
+
+    """
+
+Scenario: Single cell in a universe, dying due to underpopulation
+  Given I have a 3x3 universe with a cell at 1x1
+  When 1 tick passes
+  Then I should see the output:
+    """
+    ...
+    ...
+    ...
+
+    """
+
+@wip
+Scenario: Cell dying due to overcrowding
+  Given I have a 3x3 universe with cells at:
+    | x | y |
+    | 1 | 0 |
+    | 0 | 1 |
+    | 1 | 1 |
+    | 2 | 1 |
+    | 1 | 2 | 
+  When 1 tick passes
+  Then I should see the output:
+    """
+    .x.
+    x.x
+    .x.
+
     """
