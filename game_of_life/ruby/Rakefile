@@ -2,7 +2,7 @@ require 'rubygems'
 require 'spec/rake/spectask'
 require 'cucumber/rake/task'
 
-task :default => ['cucumber','spec']
+task :default => ['spec','cucumber']
   
 desc "Run the Rspec specs"
 Spec::Rake::SpecTask.new do |t|
