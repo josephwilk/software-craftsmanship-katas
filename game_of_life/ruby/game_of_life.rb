@@ -1,4 +1,7 @@
 class Universe
+  DEAD = '.'
+  LIVE = 'x'
+  
   def initialize(x,y)
     @x_max = x-1
     @y_max = y-1
@@ -16,15 +19,15 @@ class Universe
   end
 
   def live(x,y)
-    @board[x][y] = 'x'
+    @board[x][y] = LIVE
   end
 
   def live?(x,y)
-    valid_cell?(x,y) && @board[x][y] == 'x'
+    valid_cell?(x,y) && @board[x][y] == LIVE
   end
 
   def dead(x,y)
-    @board[x][y] = '.'
+    @board[x][y] = DEAD
   end
   
   def to_s
