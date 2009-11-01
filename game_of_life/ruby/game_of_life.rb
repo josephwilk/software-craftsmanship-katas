@@ -1,26 +1,32 @@
 class Universe
   def initialize(x,y)
-    @x = x-1
-    @y = y-1
+    @x_max = x-1
+    @y_max = y-1
     @board = Array.new(x) {Array.new(y){'.'}}
+  end
+  
+  def tick
+    universe_metrics = UniverseMetrics.new(self)
+
+    each_cell do |x, y|
+      if universe_metrics.neighbours(x, y) > 3
+        dead(x, y)
+      end
+    end
   end
 
   def live(x,y)
     @board[x][y] = 'x'
   end
-  
-  def tick
-    universe_metrics = UniverseMetrics.new(self)
-    
-    @board.each_with_index do |x, x_index|
-      x.each_with_index do |y, y_index|
-        if universe_metrics.neighbours(x_index,y_index) > 3
-          @board[x_index][y_index] = '.'
-        end
-      end
-    end
+
+  def live?(x,y)
+    valid_cell?(x,y) && @board[x][y] == 'x'
   end
 
+  def dead(x,y)
+    @board[x][y] = '.'
+  end
+  
   def to_s
     out = StringIO.new
     @board.each do |x|
@@ -29,17 +35,21 @@ class Universe
     out.string
   end
 
-  def live?(x,y)
-    valid_cell?(x,y) && @board[x][y] == 'x'
+  def each_cell
+    (0..@x_max).each do |x|
+      (0..@y_max).each do |y|
+        yield(x, y)
+      end
+    end
   end
-
-  def size
-    return @x, @y
+ 
+  def dimensions
+    return @x_max, @y_max
   end
   
   private
   def valid_cell?(x,y)
-    (y >= 0 && x >= 0) && (y <= @y && x <= @x)
+    (y >= 0 && x >= 0) && (y <= @y_max && x <= @x_max)
   end
 end
 
