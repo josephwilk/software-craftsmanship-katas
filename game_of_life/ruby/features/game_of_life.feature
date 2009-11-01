@@ -1,6 +1,6 @@
 Feature: Rendering the Game of life universe
   In order to understand the simulation of life
-  As a developer
+  As an observer of life
   I want to see what the universe looks like at different times
 
 Scenario: Empty universe
