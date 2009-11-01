@@ -1,0 +1,23 @@
+require 'rubygems'
+require 'spec/rake/spectask'
+require 'cucumber/rake/task'
+
+task :default => ['cucumber','spec']
+  
+desc "Run the Rspec specs"
+Spec::Rake::SpecTask.new do |t|
+  t.spec_opts = ['--options', "spec/spec.opts"]
+  t.spec_files = FileList['spec/**/*_spec.rb']
+  t.rcov = ENV['RCOV']
+  t.rcov_opts = %w{--exclude osx\/objc,gems\/,spec\/}
+  t.verbose = true
+end
+
+Cucumber::Rake::Task.new(:cucumber) do |t|
+  t.cucumber_opts = "--format pretty"
+end
+
+desc "Flog it"
+task :flog do
+  system "flog *.rb"
+end
