@@ -5,7 +5,7 @@ class Universe
   def initialize(x,y)
     @x_max = x-1
     @y_max = y-1
-    @board = Array.new(x) {Array.new(y){'.'}}
+    @board = Array.new(x) {Array.new(y){DEAD}}
   end
   
   def tick
