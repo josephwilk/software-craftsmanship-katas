@@ -25,7 +25,6 @@ Scenario: Single cell in a universe, dying due to underpopulation
 
     """
 
-@wip
 Scenario: Cell dying due to overcrowding
   Given I have a 3x3 universe with cells at:
     | x | y |
