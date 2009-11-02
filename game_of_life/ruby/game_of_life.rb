@@ -38,6 +38,10 @@ class Universe
     end
   end
 
+  def cell(x, y)
+    Cell.new(x, y, self)
+  end
+  
   def to_s
     out = StringIO.new
     @board.each do |x|

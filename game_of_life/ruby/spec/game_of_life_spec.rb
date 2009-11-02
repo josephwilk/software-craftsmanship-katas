@@ -15,9 +15,8 @@ describe Cell do
   context "universe full of cells" do
     it "should show center cell as overpopulated" do
       @universe.each_cell {|cell| @universe.create(cell)}
-      cell = Cell.new(1, 1, @universe)
       
-      cell.should be_overpopulated
+      @universe.cell(1, 1).should be_overpopulated
     end
   end
   
@@ -25,9 +24,7 @@ describe Cell do
     it "should not be overpopulated" do
       @universe.create_cell(1,1)
 
-      cell = Cell.new(1, 1, @universe)
-
-      cell.should_not be_overpopulated
+      @universe.cell(1, 1).should_not be_overpopulated
     end
   end
 
@@ -37,10 +34,8 @@ describe Cell do
       @universe.create_cell(0,1)
       @universe.create_cell(1,0)
       @universe.create_cell(1,1)
-
-      cell = Cell.new(0, 0, @universe)
-      
-      cell.should_not be_overpopulated
+     
+      @universe.cell(0, 0).should_not be_overpopulated
     end
   end 
 end
