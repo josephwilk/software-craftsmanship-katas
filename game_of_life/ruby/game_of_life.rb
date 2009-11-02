@@ -27,7 +27,7 @@ class Universe
   end
 
   def alive?(x,y)
-    valid_cell?(x,y) && @board[x][y] == ALIVE
+    @board[x][y] == ALIVE
   end
   
   def each_cell
@@ -49,15 +49,16 @@ class Universe
     end
     out.string
   end
+
+  def valid_cell?(x, y)
+    (y >= 0 && x >= 0) && (y <= @y_max && x <= @x_max)
+  end
   
   private
   def kill(cell)
     @board[cell.x][cell.y] = DEAD
   end
- 
-  def valid_cell?(x, y)
-    (y >= 0 && x >= 0) && (y <= @y_max && x <= @x_max)
-  end
+
 end
 
 class Cell
@@ -70,30 +71,33 @@ class Cell
   end
 
   def overpopulated?
-    neighbours(@x, @y) > 3
+    alive_neighbours > 3
   end
 
   def underpopulated?
-    neighbours(@x, @y) < 2
+    alive_neighbours < 2
   end
  
   private
-  def neighbours(x, y)
-    neighbours = 0
+  def alive_neighbours
+    alive_neighbours = 0
+    neighbour_cells {|x, y| alive_neighbours+= 1 if @universe.alive?(x, y)}
+    alive_neighbours
+  end
+  
+  def neighbour_cells
     (-1..1).each do |x_offset|
       (-1..1).each do |y_offset|
-        unless skip_offset?(x_offset, y_offset)
-          neighbour_x = x+x_offset
-          neighbour_y = y+y_offset
-
-          neighbours += 1 if @universe.alive?(neighbour_x, neighbour_y)
+        if !skip_offset?(x_offset, y_offset) 
+          neighbour_x = @x + x_offset
+          neighbour_y = @y + y_offset
+          yield(neighbour_x, neighbour_y) if @universe.valid_cell?(neighbour_x, neighbour_y)
         end
       end
     end
-    neighbours
   end
   
   def skip_offset?(x_offset, y_offset)
     (x_offset == 0 && y_offset == 0)
-  end 
+  end
 end
