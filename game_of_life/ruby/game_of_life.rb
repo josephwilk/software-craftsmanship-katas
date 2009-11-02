@@ -1,43 +1,31 @@
 class Universe
   DEAD = '.'
-  LIVE = 'x'
+  ALIVE = 'x'
   
   def initialize(x,y)
     @x_max = x-1
     @y_max = y-1
-    @board = Array.new(x) {Array.new(y){'.'}}
+    @board = Array.new(x) {Array.new(y){DEAD}}
   end
   
   def tick
-    universe_metrics = UniverseMetrics.new(self)
+    cell_analysier = CellAnalysier.new(self)
 
     each_cell do |x, y|
-      if universe_metrics.neighbours(x, y) > 3
-        dead(x, y)
+      if cell_analysier.overpopulated?(x, y)
+        kill_cell(x, y)
       end
     end
   end
 
-  def live(x,y)
-    @board[x][y] = LIVE
+  def create_cell(x,y)
+    @board[x][y] = ALIVE
   end
 
-  def live?(x,y)
-    valid_cell?(x,y) && @board[x][y] == LIVE
-  end
-
-  def dead(x,y)
-    @board[x][y] = DEAD
+  def alive?(x,y)
+    valid_cell?(x,y) && @board[x][y] == ALIVE
   end
   
-  def to_s
-    out = StringIO.new
-    @board.each do |x|
-      out.puts x.to_s
-    end
-    out.string
-  end
-
   def each_cell
     (0..@x_max).each do |x|
       (0..@y_max).each do |y|
@@ -45,23 +33,37 @@ class Universe
       end
     end
   end
- 
-  def dimensions
-    return @x_max, @y_max
+
+  def to_s
+    out = StringIO.new
+    @board.each do |x|
+      out.puts x.to_s
+    end
+    out.string
   end
   
   private
-  def valid_cell?(x,y)
+
+  def kill_cell(x,y)
+    @board[x][y] = DEAD
+  end
+  
+  def valid_cell?(x, y)
     (y >= 0 && x >= 0) && (y <= @y_max && x <= @x_max)
   end
 end
 
-class UniverseMetrics
+class CellAnalysier
   def initialize(universe)
     @universe = universe
   end
+
+  def overpopulated?(x, y)
+    neighbours(x, y) > 3
+  end
   
-  def neighbours(x,y)
+  private
+  def neighbours(x, y)
     neighbours = 0
     (-1..1).each do |x_offset|
       (-1..1).each do |y_offset|
@@ -69,7 +71,7 @@ class UniverseMetrics
           neighbour_x = x+x_offset
           neighbour_y = y+y_offset
 
-          neighbours += 1 if @universe.live?(neighbour_x, neighbour_y)
+          neighbours += 1 if @universe.alive?(neighbour_x, neighbour_y)
         end
       end
     end

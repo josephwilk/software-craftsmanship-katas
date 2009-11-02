@@ -5,7 +5,7 @@ end
 Given /^I have a 3x3 universe with cells at:$/ do |table|
   Given "I have a 3x3 universe"
   table.hashes.each do |coordinate|
-    @universe.live(coordinate['x'].to_i, coordinate['y'].to_i)
+    @universe.create_cell(coordinate['x'].to_i, coordinate['y'].to_i)
   end
 end
 
