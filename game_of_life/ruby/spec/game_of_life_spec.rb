@@ -1,25 +1,23 @@
 require File.dirname(__FILE__) + '/../game_of_life'
 
-describe CellAnalysier do
+describe Cell do
 
   before(:each) do
     @universe = Universe.new(3,3)
   end
  
   context "empty universe" do
-    it "should not show any cell as overpopulated" do
-      cell_analysier = CellAnalysier.new(@universe)
-      
-      @universe.each_cell {|x,y| cell_analysier.overpopulated?(x,y).should be_false}
+    it "should not show any cell as overpopulated" do   
+      @universe.each_cell {|cell| cell.should_not be_overpopulated}
     end
   end
 
   context "universe full of cells" do
     it "should show center cell as overpopulated" do
-      @universe.each_cell {|x,y| @universe.create_cell(x,y)}
-      cell_analysier = CellAnalysier.new(@universe)
+      @universe.each_cell {|cell| @universe.create(cell)}
+      cell = Cell.new(1, 1, @universe)
       
-      cell_analysier.overpopulated?(1,1).should be_true
+      cell.should be_overpopulated
     end
   end
   
@@ -27,9 +25,9 @@ describe CellAnalysier do
     it "should not be overpopulated" do
       @universe.create_cell(1,1)
 
-      cell_analysier = CellAnalysier.new(@universe)
+      cell = Cell.new(1, 1, @universe)
 
-      cell_analysier.overpopulated?(1,1).should be_false
+      cell.should_not be_overpopulated
     end
   end
 
@@ -40,9 +38,9 @@ describe CellAnalysier do
       @universe.create_cell(1,0)
       @universe.create_cell(1,1)
 
-      cell_analysier = CellAnalysier.new(@universe)
+      cell = Cell.new(0, 0, @universe)
       
-      cell_analysier.overpopulated?(0,0).should be_false
+      cell.should_not be_overpopulated
     end
   end 
 end

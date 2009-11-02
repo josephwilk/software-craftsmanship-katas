@@ -9,19 +9,21 @@ class Universe
   end
   
   def tick
-    cell_analysier = CellAnalysier.new(self)
-
-    each_cell do |x, y|
-      if cell_analysier.underpopulated?(x, y)
-        kill_cell(x, y)
-      elsif cell_analysier.overpopulated?(x, y)
-        kill_cell(x, y)
+    each_cell do |cell|
+      if cell.underpopulated?
+        kill(cell)
+      elsif cell.overpopulated?
+        kill(cell)
       end
     end
   end
 
-  def create_cell(x,y)
+  def create_cell(x, y)
     @board[x][y] = ALIVE
+  end
+
+  def create(cell)
+    create_cell(cell.x, cell.y)
   end
 
   def alive?(x,y)
@@ -31,7 +33,7 @@ class Universe
   def each_cell
     (0..@x_max).each do |x|
       (0..@y_max).each do |y|
-        yield(x, y)
+        yield Cell.new(x, y, self)
       end
     end
   end
@@ -45,29 +47,32 @@ class Universe
   end
   
   private
-
-  def kill_cell(x,y)
-    @board[x][y] = DEAD
+  def kill(cell)
+    @board[cell.x][cell.y] = DEAD
   end
-  
+ 
   def valid_cell?(x, y)
     (y >= 0 && x >= 0) && (y <= @y_max && x <= @x_max)
   end
 end
 
-class CellAnalysier
-  def initialize(universe)
+class Cell
+  attr_reader :x, :y
+  
+  def initialize(x, y, universe)
+    @x = x
+    @y = y
     @universe = universe
   end
 
-  def overpopulated?(x, y)
-    neighbours(x, y) > 3
+  def overpopulated?
+    neighbours(@x, @y) > 3
   end
 
-  def underpopulated?(x, y)
-    neighbours(x, y) < 2
+  def underpopulated?
+    neighbours(@x, @y) < 2
   end
-  
+ 
   private
   def neighbours(x, y)
     neighbours = 0
