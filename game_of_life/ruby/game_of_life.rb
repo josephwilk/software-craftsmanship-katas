@@ -12,7 +12,9 @@ class Universe
     cell_analysier = CellAnalysier.new(self)
 
     each_cell do |x, y|
-      if cell_analysier.overpopulated?(x, y)
+      if cell_analysier.underpopulated?(x, y)
+        kill_cell(x, y)
+      elsif cell_analysier.overpopulated?(x, y)
         kill_cell(x, y)
       end
     end
@@ -60,6 +62,10 @@ class CellAnalysier
 
   def overpopulated?(x, y)
     neighbours(x, y) > 3
+  end
+
+  def underpopulated?(x, y)
+    neighbours(x, y) < 2
   end
   
   private
